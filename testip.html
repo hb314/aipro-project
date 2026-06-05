@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html style="height: 100%;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache,no-store">
+    <meta http-equiv="cache-control" content="no-cache,no-store">
+    <meta http-equiv="expires" content="0">
+    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta http-equiv="X-cUA-Compatible" content="IE=edge">
+    <meta property="og:site_name" content="富邦 AI PRO - 下載頁面" />
+    <meta property="og:title" content="富邦 AI PRO - 下載頁面" />
+    <meta name="keywords"
+        content="富邦,富邦 AI PRO,交易系統,手機下單,mobile,下載,download,apk,QR code,QR,android,iphone,ipad,ios,google play,play store,app store,apps,app">
+    <link rel="icon" type="image/ico" href="/favicon.ico">
+    <title>富邦 AI PRO</title>
+</head>
+
+<body>
+<script type="text/javascript">
+
+var iOSLink = "https://apps.apple.com/tw/app/id6751573234"; // iOS 應用程式商店連結
+var androidLink = "https://play.google.com/store/apps/details?id=com.fubon.securities.fubonaipro&hl=zh_TW"; // Android 應用程式商店連結
+var deepLink = "fap-aipro://Launcher?Action=FBSECOUNTER"; // App 喚醒連結 (Deep Link)
+
+// 將網址包裝為 App 外部瀏覽器開啟格式
+function open_without_webview(url) {
+    window.location.href = "$URL(Y,0,web," + url + ")";
+}
+
+// 嘗試開啟 App，若未安裝則導向商店
+function attemptDeepLink(fallbackUrl) {
+    var start = Date.now();
+    var timeout = 2500; // 等待 2.5 秒
+
+    // 嘗試喚醒 App
+    window.location.href = deepLink;
+
+    // 設定超時回呼函式 (Callback) 作為 Fallback
+    setTimeout(function() {
+        var end = Date.now();
+        // 如果成功喚醒 App，系統會將瀏覽器切換至背景，使得 setTimeout 延遲執行，或是 document.hidden 變為 true。
+        // 若時間差在合理範圍內，且網頁仍在前景，代表 App 沒被打開（未安裝），此時執行跳轉商店。
+        if (end - start < timeout + 1000 && !document.hidden) {
+            open_without_webview(fallbackUrl);
+        }
+    }, timeout);
+}
+
+// 將我們的使用者代理 (user agent) 字串初始化為小寫。
+var uagent = navigator.userAgent.toLowerCase();
+
+// 透過正則表達式簡化裝置判斷邏輯
+var isIOS = /iphone|ipod|ipad/.test(uagent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var isAndroid = /android/.test(uagent);
+
+if (isIOS) {
+    attemptDeepLink(iOSLink); // 嘗試開啟 App，失敗則導向 App Store
+}
+else if (isAndroid) {
+    attemptDeepLink(androidLink); // 嘗試開啟 App，失敗則導向 Google Play
+}
+else{
+    window.location.href = "https://www.fubon.com/securities/aipro/index.html"; // 桌機不使用 App 專用外開語法，直接導向
+}
+</script>
+</body>
+</html>
